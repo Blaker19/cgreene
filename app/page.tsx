@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <main
@@ -16,61 +28,44 @@ export default function Home() {
         position: "relative",
       }}
     >
-      {/* Title block (upper right) */}
+      {/* Title block */}
       <div
         style={{
           position: "absolute",
-          top: 64,
-          right: 64,
-          textAlign: "right",
+          top: isMobile ? 32 : 64,
+          right: isMobile ? "50%" : 64,
+          transform: isMobile ? "translateX(50%)" : "none",
+          textAlign: isMobile ? "center" : "right",
           color: "black",
           fontFamily: "Arial, sans-serif",
         }}
       >
-        <div
-          style={{
-            fontSize: 30,
-            fontWeight: 600,
-          }}
-        >
+        <div style={{ fontSize: 36, fontWeight: 600 }}>
           Caroline Greene
         </div>
 
-        <div
-          style={{
-            fontSize: 36,
-            letterSpacing: 3,
-            marginTop: 10,
-          }}
-        >
+        <div style={{ fontSize: 18, letterSpacing: 3, marginTop: 10 }}>
           ARCHITECTURE
         </div>
 
-        <div
-          style={{
-            fontSize: 36,
-            letterSpacing: 3,
-          }}
-        >
+        <div style={{ fontSize: 18, letterSpacing: 3 }}>
           PORTFOLIO
         </div>
 
-        <div
-          style={{
-            fontSize: 44,
-            marginTop: 10,
-          }}
-        >
+        <div style={{ fontSize: 16, marginTop: 10 }}>
           2026
         </div>
       </div>
 
-      {/* Download link (bottom right) */}
+      {/* Download button */}
       <div
         style={{
-          position: "absolute",
-          bottom: 64,
-          right: 64,
+          position: "fixed",
+          bottom: isMobile ? 20 : 64,
+          right: isMobile ? 20 : 64,
+          left: isMobile ? 20 : "auto",
+          display: "flex",
+          justifyContent: isMobile ? "center" : "flex-end",
           fontFamily: "Arial, sans-serif",
         }}
       >
@@ -80,14 +75,15 @@ export default function Home() {
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           style={{
-            display: "inline-block",
-            padding: "16px 22px",
+            width: isMobile ? "100%" : "auto",
+            textAlign: "center",
+            padding: isMobile ? "18px 0" : "16px 22px",
             background: isHovering
-              ? "rgba(46, 125, 50, 0.85)" // green hover
-              : "rgba(0, 0, 0, 0.6)",    // default gray
+              ? "rgba(46, 125, 50, 0.85)"
+              : "rgba(0, 0, 0, 0.6)",
             color: "white",
             textDecoration: "none",
-            borderRadius: 12,
+            borderRadius: 14,
             backdropFilter: "blur(4px)",
             fontSize: 16,
             transition: "background 0.25s ease",
